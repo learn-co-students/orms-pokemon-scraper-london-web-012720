@@ -15,18 +15,17 @@ class Pokemon
         end
 
         def self.find(id, db)
-        pokemon = db.execute("SELECT * FROM pokemon WHERE id = ?;", id).flatten
+        db.execute("SELECT * FROM pokemon WHERE id = ?;", id).map do |row|
 
-        self.new(id: pokemon[0], name: pokemon[1], type: pokemon[2], db: db)
-            
-            #binding.pry
-
+            self.new_from_db(row)
+          
+        end.first
         end
 
-        # def self.new_from_db(row)
-        #     pokemon = self.new(row[0], row[1], row[2])
-        #     pokemon
-        # end
+        def self.new_from_db(row)
+            self.new(id: row[0], name: row[1], type: row[2], db: @db)
+       
+        end
 
     
 end
